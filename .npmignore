@@ -1,0 +1,19 @@
+# .npmignore
+
+# Development files
+src/
+tests/
+examples/
+coverage/
+
+# Configs
+.eslintrc
+.prettierrc
+jest.config.js
+tsconfig.json
+
+# CI and misc
+.github/
+.gitignore
+.npmignore
+CHANGELOG.md
