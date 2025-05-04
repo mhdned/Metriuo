@@ -1,7 +1,34 @@
 import fs from 'fs';
 import path from 'path';
-import { MetriuoOptions, RequestDataType } from './metriuo.types';
 import { Request, Response, NextFunction } from 'express';
+
+import { MetriuoOptions, RequestDataType } from './metriuo.types';
+import { MetriuoOptionsType } from './types/monitoring.type';
+
+export class Metriuo {
+  public static metriuoInstance: Metriuo;
+
+  private folder: string;
+  private logFileFormat: string;
+
+  private constructor(options: MetriuoOptionsType) {
+    this.folder = options.folder;
+    this.logFileFormat = options.logFileFormat ?? 'json';
+  }
+
+  public static setup(options: MetriuoOptionsType): Metriuo {
+    Metriuo.metriuoInstance = new Metriuo(options);
+    return Metriuo.metriuoInstance;
+  }
+
+  public static monitoring() {
+    return;
+  }
+
+  public static logger() {
+    return;
+  }
+}
 
 export default function requestLogger(options: MetriuoOptions = {}) {
   const { logFolder = '/logs', logFormat = 'json' } = options;
