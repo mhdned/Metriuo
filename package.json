@@ -19,7 +19,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "ts-node src/index.ts",
-    "prepack": "npm run build"
+    "prepack": "npm run build& npm link"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
