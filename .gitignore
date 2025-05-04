@@ -4,6 +4,7 @@ node_modules/
 # --- Build/Output directories ---
 out/
 *.log
+*.log.*
 
 # --- Environment/config files ---
 .env
