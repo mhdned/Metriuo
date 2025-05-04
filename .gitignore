@@ -35,3 +35,4 @@ pnpm-debug.log*
 
 # --- Optional (uncomment if needed) ---
 # .cache/
+.qodo
