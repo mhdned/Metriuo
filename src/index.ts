@@ -1,30 +1,63 @@
-import { Request, Response, NextFunction } from "express";
+import fs from 'fs';
+import path from 'path';
+import { MetriuoOptions, RequestDataType } from './metriuo.types';
+import { Request, Response, NextFunction } from 'express';
 
-interface RequestLoggerOptions {
-  message?: string;
-  timestamp?: boolean;
-}
+export default function requestLogger(options: MetriuoOptions = {}) {
+  const { logFolder = '/logs', logFormat = 'json' } = options;
 
-export default function requestLogger(options?: RequestLoggerOptions) {
-  const defaultOptions: RequestLoggerOptions = {
-    message: "Hello World",
-    timestamp: true,
-  };
-
-  const mergedOptions = { ...defaultOptions, ...options };
+  const today: Date = new Date();
+  const todayString: string = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
 
   return (req: Request, res: Response, next: NextFunction) => {
-    let logMessage = "";
+    const start = process.hrtime();
 
-    if (mergedOptions.timestamp) {
-      logMessage += `${new Date().toISOString()} - `;
-    }
+    res.on('finish', () => {
+      const diff = process.hrtime(start);
+      const responseTime = `${(diff[0] * 1e3 + diff[1] / 1e6).toFixed(3)} ms`;
 
-    logMessage += mergedOptions.message;
+      const logData: RequestDataType = {
+        url: req.url,
+        host: req.get('host') || '',
+        baseUrl: req.baseUrl,
+        hostname: req.hostname,
 
-    console.log(logMessage);
-    console.log(`Method: ${req.method}`);
-    console.log(`Path: ${req.path}`);
+        ip: req.ip,
+        ips: req.ips,
+        location: req.headers['location'],
+        userAgent: req.headers['user-agent'],
+        connection: req.headers['connection'],
+        authorization: req.headers['authorization'],
+
+        path: req.path,
+        body: req.body,
+        query: req.query,
+        params: req.params,
+
+        method: req.method,
+        httpVersion: req.httpVersion,
+
+        responseTime,
+        responseStatus: res.statusCode,
+      };
+
+      const logPath = path.join(
+        './',
+        `${logFolder}/${todayString}.${logFormat}`
+      );
+
+      if (!fs.existsSync(logFolder)) {
+        fs.mkdirSync(logFolder, { recursive: true });
+      }
+
+      const logLine = JSON.stringify(logData) + '\n';
+
+      fs.appendFile(logPath, logLine, (error) => {
+        if (error) {
+          console.error('Failed to write log:', error);
+        }
+      });
+    });
 
     next();
   };
