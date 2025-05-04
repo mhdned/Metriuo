@@ -24,6 +24,7 @@ desktop.ini
 # --- Testing & Debugging ---
 *.test.js.map   # Sourcemaps for tests
 /__snapshots__/ # Jest snapshots
+logs
 
 # --- Package manager specific ---
 npm-debug.log*
