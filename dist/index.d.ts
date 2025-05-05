@@ -1,4 +1,2 @@
-import { MetriuoOptions } from './metriuo.types';
-import { Request, Response, NextFunction } from 'express';
-export default function requestLogger(options?: MetriuoOptions): (req: Request, res: Response, next: NextFunction) => void;
+export {};
 //# sourceMappingURL=index.d.ts.map
