@@ -7,7 +7,12 @@
     "sourceMap": true,
     "module": "commonjs",
     "target": "ES2020",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@types/*": ["./src/types/*"],
+      "@helpers/*": ["./src/helpers/*"],
+      "@middlewares/*": ["./src/middlewares/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
