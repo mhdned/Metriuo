@@ -32,6 +32,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@duckdb/node-api": "^1.2.2-alpha.18",
     "express": "^5.1.0"
   }
 }
