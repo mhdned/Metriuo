@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS request_logs (
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    url TEXT,
+    host TEXT,
+    baseUrl TEXT,
+    hostname TEXT,
+    ip TEXT,
+    ips TEXT,
+    location TEXT,
+    userAgent TEXT,
+    connection TEXT,
+    auth TEXT,
+    path TEXT,
+    body JSON,
+    query JSON,
+    params JSON,
+    method TEXT,
+    httpVersion TEXT,
+    responseTime TEXT,
+    responseStatus INTEGER
+  )
