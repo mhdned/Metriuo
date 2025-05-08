@@ -12,7 +12,7 @@ export function requestLogger(options: LoggerOptionsType) {
   return (req: Request, res: Response, next: NextFunction) => {
     const start = process.hrtime();
 
-    res.on('finish', () => {
+    res.on('finish', async () => {
       const diff = process.hrtime(start);
       const responseTime = `${(diff[0] * 1e3 + diff[1] / 1e6).toFixed(3)} ms`;
 
@@ -46,7 +46,7 @@ export function requestLogger(options: LoggerOptionsType) {
         `${options.folder}/${todayString}.${options.logFileFormat}`
       );
 
-      if (!fs.existsSync(options.folder)) {
+      if (options.folder && !fs.existsSync(options.folder)) {
         fs.mkdirSync(options.folder, { recursive: true });
       }
 
