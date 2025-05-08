@@ -4,12 +4,15 @@ import { Request, Response, NextFunction } from 'express';
 
 import { LoggerOptionsType } from './../types/logger.type';
 import { RequestDataType } from './../types/metriuo.types';
+import { DuckDatabaseService } from './../services/duckdb.service';
 
 export function requestLogger(options: LoggerOptionsType) {
   const today: Date = new Date();
   const todayString: string = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
 
-  return (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const db = await DuckDatabaseService.createInstance();
+
     const start = process.hrtime();
 
     res.on('finish', async () => {
@@ -57,6 +60,41 @@ export function requestLogger(options: LoggerOptionsType) {
           console.error('Failed to write log:', error);
         }
       });
+
+      await db.connection.run(
+        `INSERT INTO request_logs (
+            url, host, baseUrl, hostname, ip, ips, location,
+            userAgent, connection, auth, path,
+            body, query, params,
+            method, httpVersion, responseTime, responseStatus
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          logData.url || '',
+          logData.host || '',
+          logData.baseUrl || '',
+          logData.hostname || '',
+          logData.ip || '',
+          logData.ips.join(','),
+          logData.location || '',
+          logData.userAgent || '',
+          logData.connection || '',
+          logData.authorization || '',
+          logData.path || '',
+          JSON.stringify(logData.body || {}),
+          JSON.stringify(logData.query || {}),
+          JSON.stringify(logData.params || {}),
+          logData.method || '',
+          logData.httpVersion || '',
+          responseTime || '',
+          logData.responseStatus,
+        ]
+      );
+
+      let dataResult = await db.connection.run(`SELECT * FROM request_logs`);
+
+      let rows = await dataResult.getRowsJS();
+
+      console.log(rows);
     });
 
     next();
