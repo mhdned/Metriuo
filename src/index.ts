@@ -1,43 +1,20 @@
-import * as path from 'path';
-import * as fs from 'fs/promises';
-import { DuckDBConnection, DuckDBInstance } from '@duckdb/node-api';
-
 import { MetriuoOptionsType } from './types/monitoring.type';
 import { requestLogger } from './middlewares/logger.middleware';
 
-class Metriuo {
+export class Metriuo {
   public static metriuoInstance: Metriuo;
 
-  private folder: string;
-  private logFileFormat: 'json' | 'txt';
-  private static duckDBInstance: DuckDBInstance;
-  private static duckDBConnection: DuckDBConnection;
+  public folder: string;
+  public logFileFormat: 'json' | 'txt';
 
-  private constructor(options: MetriuoOptionsType) {
-    this.folder = options.folder;
+  constructor(options: MetriuoOptionsType) {
+    this.folder = options.folder ?? './log';
     this.logFileFormat = options.logFileFormat ?? 'json';
   }
 
-  public static async initialize(
-    options: MetriuoOptionsType
-  ): Promise<Metriuo> {
+  public static initialize(options: MetriuoOptionsType): Metriuo {
     Metriuo.metriuoInstance = new Metriuo(options);
-    await this.initializeDuckDB();
     return Metriuo.metriuoInstance;
-  }
-
-  private static async initializeDuckDB() {
-    const databasePath = path.join(__dirname, './database/metriuo.db');
-    const instance = await DuckDBInstance.create(databasePath);
-    const sqlFilePath = path.join(
-      __dirname,
-      './database/sql/createRequestLogTable.sql'
-    );
-    const createRequestTableQuery = await fs.readFile(sqlFilePath, 'utf-8');
-    const connection = await instance.connect();
-    await connection.run(createRequestTableQuery);
-    this.duckDBConnection = connection;
-    this.duckDBInstance = instance;
   }
 
   public monitoring() {
@@ -51,5 +28,3 @@ class Metriuo {
     });
   }
 }
-
-module.exports = Metriuo;
