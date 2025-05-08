@@ -1,14 +1,14 @@
 const express = require('express');
 const app = express();
 
-const Metriuo = require('metriuo');
+const { Metriuo } = require('metriuo');
 
-const monitoringAPI = Metriuo.setup({
+const metriuo = Metriuo.initialize({
   folder: './logs',
   logFileFormat: 'json',
 });
 
-app.use(monitoringAPI.logger());
+app.use(metriuo.logger());
 
 app.get('/', (req, res) => {
   res.send('Home Page');
