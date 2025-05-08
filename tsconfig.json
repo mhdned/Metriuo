@@ -1,19 +1,20 @@
 {
   "compilerOptions": {
+    "strict": true,
     "outDir": "./dist",
     "rootDir": "./src",
+    "target": "ES2020",
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
     "module": "commonjs",
-    "target": "ES2020",
     "esModuleInterop": true,
+    "moduleResolution": "node",
     "paths": {
       "@types/*": ["./src/types/*"],
       "@helpers/*": ["./src/helpers/*"],
       "@middlewares/*": ["./src/middlewares/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*", "src/database/**/*"],
+  "exclude": ["node_modules", "tests"]
 }
