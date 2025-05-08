@@ -7,7 +7,7 @@ export class Metriuo {
   public folder: string;
   public logFileFormat: 'json' | 'txt';
 
-  constructor(options: MetriuoOptionsType) {
+  private constructor(options: MetriuoOptionsType) {
     this.folder = options.folder ?? './log';
     this.logFileFormat = options.logFileFormat ?? 'json';
   }
