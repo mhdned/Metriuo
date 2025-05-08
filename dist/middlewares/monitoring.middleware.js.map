@@ -1,1 +1,0 @@
-{"version":3,"file":"monitoring.middleware.js","sourceRoot":"","sources":["../../src/middlewares/monitoring.middleware.ts"],"names":[],"mappings":";;AAEA,KAAK,UAAU,cAAc;IAC3B,OAAO,CAAC,GAAY,EAAE,GAAa,EAAE,IAAkB,EAAE,EAAE;QACzD,oDAAoD;QAEpD,6BAA6B;QAE7B,aAAa;QAEb,IAAI,EAAE,CAAC;IACT,CAAC,CAAC;AACJ,CAAC"}
