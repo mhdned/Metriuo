@@ -4,7 +4,7 @@ export interface RequestDataType {
   baseUrl: string;
   hostname: string;
 
-  ip: string;
+  ip?: string;
   ips: string[];
   location?: string;
   userAgent?: string;
