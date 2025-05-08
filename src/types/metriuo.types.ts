@@ -4,12 +4,12 @@ export interface RequestDataType {
   baseUrl: string;
   hostname: string;
 
-  ip?: string;
+  ip: string | undefined;
   ips: string[];
-  location?: string;
-  userAgent?: string;
-  connection?: string;
-  authorization?: string;
+  location: string | undefined;
+  userAgent: string | undefined;
+  connection: string | undefined;
+  authorization: string | undefined;
 
   path: string;
   body: object;
