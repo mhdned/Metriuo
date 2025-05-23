@@ -15,6 +15,6 @@
       "@middlewares/*": ["./src/middlewares/*"]
     }
   },
-  "include": ["src/**/*", "src/database/**/*"],
+  "include": ["src/**/*", "src/database/**/*", "src/views/**/*"],
   "exclude": ["node_modules", "tests"]
 }
