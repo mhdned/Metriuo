@@ -1,6 +1,6 @@
 # Metriuo
 
-![Alt Text](./public/images/MetriuoBannerDark.png#gh-dark-mode-only) ![Alt Text](./public/images/MetriuoBannerLight.png#gh-light-mode-only)
+![METRIUO](./public/images/MetriuoBannerDark.png#gh-dark-mode-only) ![metriuo](./public/images/MetriuoBannerLight.png#gh-light-mode-only)
 
 Metriuo is my experimental attempt to solve a simple yet persistent problem: **logging useful request data without drowning in complexity**. Think of it as your personal HTTP historian—writing logs for every request quietly in the background, but now in a powerful local database instead of plain files.
 
