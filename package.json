@@ -1,6 +1,6 @@
 {
   "name": "metriuo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lightweight Express middleware to log HTTP request and response data.",
   "keywords": [
     "Typescript",
