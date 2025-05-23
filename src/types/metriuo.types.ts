@@ -22,8 +22,3 @@ export interface RequestDataType {
   responseTime: string | null;
   responseStatus: number;
 }
-
-export interface MetriuoOptions {
-  logFolder?: string;
-  logFormat?: 'txt' | 'json';
-}
