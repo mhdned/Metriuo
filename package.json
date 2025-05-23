@@ -18,10 +18,13 @@
   ],
   "scripts": {
     "build": "tsc",
+    "build:views": "tsc && cp -r src/views dist/views",
+    "build:database": "tsc && cp -r src/database dist/database",
     "dev": "ts-node src/index.ts",
     "prepack": "npm run build& npm link"
   },
   "devDependencies": {
+    "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.1",
     "@types/node": "^22.15.3",
     "eslint": "^9.26.0",
@@ -33,6 +36,7 @@
   },
   "dependencies": {
     "@duckdb/node-api": "^1.2.2-alpha.18",
+    "ejs": "^3.1.10",
     "express": "^5.1.0"
   }
 }
