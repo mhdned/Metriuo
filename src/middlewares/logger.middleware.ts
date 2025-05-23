@@ -1,15 +1,9 @@
-import fs from 'fs';
-import path from 'path';
 import { Request, Response, NextFunction } from 'express';
 
-import { LoggerOptionsType } from './../types/logger.type';
 import { RequestDataType } from './../types/metriuo.types';
 import { DuckDatabaseService } from './../services/duckdb.service';
 
-export function requestLogger(options: LoggerOptionsType) {
-  const today: Date = new Date();
-  const todayString: string = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
-
+export function requestLogger() {
   return async (req: Request, res: Response, next: NextFunction) => {
     const db = await DuckDatabaseService.createInstance();
 
@@ -44,23 +38,6 @@ export function requestLogger(options: LoggerOptionsType) {
         responseStatus: res.statusCode,
       };
 
-      const logPath = path.join(
-        './',
-        `${options.folder}/${todayString}.${options.logFileFormat}`
-      );
-
-      if (options.folder && !fs.existsSync(options.folder)) {
-        fs.mkdirSync(options.folder, { recursive: true });
-      }
-
-      const logLine = JSON.stringify(logData) + '\n';
-
-      fs.appendFile(logPath, logLine, (error) => {
-        if (error) {
-          console.error('Failed to write log:', error);
-        }
-      });
-
       await db.connection.run(
         `INSERT INTO request_logs (
             url, host, baseUrl, hostname, ip, ips, location,
@@ -93,8 +70,6 @@ export function requestLogger(options: LoggerOptionsType) {
       let dataResult = await db.connection.run(`SELECT * FROM request_logs`);
 
       let rows = await dataResult.getRowsJS();
-
-      console.log(rows);
     });
 
     next();
