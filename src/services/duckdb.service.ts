@@ -39,7 +39,18 @@ export class DuckDatabaseService {
     return DuckDatabaseService.db;
   }
 
-  public static async testQuery() {
-    // result = await this.
+  public async create() {}
+  public async createMany() {}
+
+  public async read(offset: number, limit: number) {
+    const readQuery = `SELECT * FROM request_logs LIMIT ${limit} OFFSET ${offset};`;
+    const result = await this.connection.run(readQuery);
+    return await result.getRowsJS();
   }
+
+  public async update() {}
+  public async updateMany() {}
+
+  public async delete() {}
+  public async deleteMany() {}
 }
