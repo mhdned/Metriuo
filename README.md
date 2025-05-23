@@ -1,22 +1,26 @@
 # Metriuo
 
-Metriuo is my experimental attempt to solve a simple yet persistent problem: **logging useful request data without drowning in complexity**. Think of it as your personal HTTP historian—writing logs for every request in either `json` or `txt` formats, quietly sitting in the background.
+![Alt Text](./public/images/MetriuoBannerDark.png#gh-dark-mode-only) ![Alt Text](./public/images/MetriuoBannerLight.png#gh-light-mode-only)
+
+Metriuo is my experimental attempt to solve a simple yet persistent problem: **logging useful request data without drowning in complexity**. Think of it as your personal HTTP historian—writing logs for every request quietly in the background, but now in a powerful local database instead of plain files.
 
 ## Overview
 
-This package captures request information in Express apps and saves it in structured log files. Perfect for building custom dashboards, R\&D, or just keeping an eye on what's hitting your server. Inspired by tools like [apitally.io/express](https://apitally.io/express), but simpler, more transparent, and customizable.
+This package captures request information in Express apps and saves it inside a local [DuckDB](https://duckdb.org/) database. Perfect for building custom dashboards, R&D, or just keeping an eye on what's hitting your server. Inspired by tools like [apitally.io/express](https://apitally.io/express), but simpler, more transparent, and customizable.
 
-> Still in BETA. I'm exploring the best way to implement and publish this as an NPM package.
+## Current Features
+
+- Logs detailed request data directly into DuckDB database (no more JSON or TXT files)
+- Offers an optional **monitoring endpoint** to query and display logged data with useful stats and insights
+- Minimal setup, extensible for future improvements
 
 ## Vision
 
 In the future, Metriuo will do more than just log data:
 
-- Expose a **dedicated endpoint** like Swagger or Redoc that shows stats and insights
+- Expose a **dedicated UI endpoint** like Swagger or Redoc showing stats and insights
 - Help developers **analyze traffic patterns** and potential misuse
 - Offer **visualizations** of request frequency, latency, endpoints, and more
-
-For now, it’s a minimal logging tool, but it has big dreams.
 
 ## Installation
 
@@ -26,34 +30,52 @@ npm install metriuo
 
 ## Usage
 
-```ts
-import express from 'express';
-import metriuo from 'metriuo';
+```js
+const express = require('express');
+const { Metriuo } = require('metriuo');
 
 const app = express();
 
-app.use(express.json());
-app.use(
-  metriuo({
-    logFolder: './logs', // optional
-    logFormat: 'json', // or 'txt'
-  })
-);
+const metriuo = Metriuo.initialize();
+
+app.use(metriuo.logger());
+
+app.use('/metriuo', metriuo.monitoring);
+
+app.get('/', (req, res) => {
+  res.send('Home Page');
+});
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
 ```
 
-## Sample Output (JSON)
+- `metriuo.logger()` — middleware to log incoming requests
+- `/metriuo` — endpoint serving monitoring data and stats
 
-```json
-{
-  "url": "/api/data",
-  "host": "localhost:3000",
-  "method": "GET",
-  "ip": "::1",
-  "responseTime": "3.214 ms",
-  "responseStatus": 200
-  // ... other details
-}
-```
+## Logged Request Data Parameters
+
+| Parameter        | Type                  | Description                                                          |
+| ---------------- | --------------------- | -------------------------------------------------------------------- |
+| `url`            | `string`              | Full request URL including path and query                            |
+| `host`           | `string`              | Host header of the request (e.g., `localhost:3000`)                  |
+| `baseUrl`        | `string`              | The URL path on which the router instance was mounted                |
+| `hostname`       | `string`              | Hostname from the request                                            |
+| `ip`             | `string \| undefined` | IP address of the client making the request                          |
+| `ips`            | `string[]`            | Array of IP addresses if the request passed through proxies          |
+| `location`       | `string \| undefined` | Geolocation info if available (requires additional setup)            |
+| `userAgent`      | `string \| undefined` | User-Agent header string (browser, bot, etc.)                        |
+| `connection`     | `string \| undefined` | Connection header information (e.g., keep-alive)                     |
+| `authorization`  | `string \| undefined` | Authorization header content (e.g., Bearer tokens)                   |
+| `path`           | `string`              | URL path part only (without query)                                   |
+| `body`           | `object`              | Parsed request body (for POST/PUT requests)                          |
+| `query`          | `object`              | Parsed query parameters from URL                                     |
+| `params`         | `object`              | URL route parameters                                                 |
+| `method`         | `string`              | HTTP method (GET, POST, PUT, DELETE, etc.)                           |
+| `httpVersion`    | `string`              | HTTP version used (e.g., "1.1", "2.0")                               |
+| `responseTime`   | `string \| null`      | Time taken to respond, in milliseconds with unit (e.g., `"5.23 ms"`) |
+| `responseStatus` | `number`              | HTTP response status code (e.g., 200, 404, 500)                      |
 
 ## Technologies
 
@@ -65,11 +87,10 @@ app.use(
 
 ## Contents
 
-- ✅ Request info logging
-- ✅ Configurable file format (`json` or `txt`)
-- 🚧 R\&D in progress for UI endpoint
-- 🚧 More detailed stats and error logging planned
-- 🚧 Storing data inside a local database instance of txt or json files.
+- ✅ Request info logging into DuckDB
+- ✅ Configurable monitoring endpoint
+- 🚧 UI dashboard & detailed analytics (planned)
+- 🚧 Enhanced error logging and alerting (planned)
 
 ## License
 
