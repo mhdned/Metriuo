@@ -3,12 +3,11 @@ const app = express();
 
 const { Metriuo } = require('metriuo');
 
-const metriuo = Metriuo.initialize({
-  folder: './logs',
-  logFileFormat: 'json',
-});
+const metriuo = Metriuo.initialize();
 
 app.use(metriuo.logger());
+
+app.use('/metriuo', metriuo.monitoring);
 
 app.get('/', (req, res) => {
   res.send('Home Page');
