@@ -13,3 +13,10 @@
 
 - Refactore the core
 - Now it's easier to use Metriuo
+
+## [0.1.0] - 2025-05-23
+
+### Added
+
+- Log store on DuckDB (no more JSON or TXT files)
+- Added monitoring page to view request report
