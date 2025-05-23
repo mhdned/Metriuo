@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>📊 Metriuo Logs</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: 8px 12px; border: 1px solid #ddd; font-size: 14px; }
+    th { background-color: #f4f4f4; position: sticky; top: 0; }
+    tr:hover { background-color: #f9f9f9; }
+  </style>
+    <style>
+  .status-2xx { background-color: #d4edda; }   /* green */
+  .status-3xx { background-color: #d1ecf1; }   /* blue */
+  .status-4xx { background-color: #fff3cd; }   /* orange */
+  .status-5xx { background-color: #f8d7da; }   /* red */
+</style>
+</head>
+<body>
+  <h1>📊 Metriuo Request Logs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th>Path</th>
+      <th>Host</th>
+      <th>IP</th>
+      <th>User Agent</th>
+      <th>Method</th>
+      <th>Duration</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% logs.forEach(function(row) { 
+         const status = parseInt(row[18], 10);
+         let statusClass = '';
+         if (status >= 500) statusClass = 'status-5xx';
+         else if (status >= 400) statusClass = 'status-4xx';
+         else if (status >= 300) statusClass = 'status-3xx';
+         else if (status >= 200) statusClass = 'status-2xx';
+    %>
+      <tr class="<%= statusClass %>">
+        <td><%= row[0] %></td>
+        <td><%= row[1] %></td>
+        <td><%= row[2] %></td>
+        <td><%= row[5] %></td>
+        <td><%= row[8] %></td>
+        <td><%= row[15] %></td>
+        <td><%= row[17] %></td>
+        <td><%= row[18] %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+</body>
+</html>
